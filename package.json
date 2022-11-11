@@ -1,5 +1,5 @@
 {
-  "name": "xedb",
+  "name": "xedb.js",
   "version": "0.1.0-alpha.1",
   "description": "Cross-runtime embedded database for JavaScript.",
   "main": "mod.js",

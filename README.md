@@ -23,8 +23,8 @@ const datastore = createDatastore({
 ```js
 import {
     createDatastore
-} from 'xedb';
-import node from 'xedb/lib/node.js';
+} from 'xedb.js';
+import node from 'xedb.js/lib/node.js';
 const datastore = createDatastore({
     runtime: node
 });
@@ -36,8 +36,8 @@ const datastore = createDatastore({
 <script type="module">
     import {
         createDatastore
-    } from 'https://raw.githack.com/KaKi87-2/xedb/master/mod.js';
-    import browser from 'https://raw.githack.com/KaKi87-2/xedb/master/lib/browser.js';
+    } from 'https://rawcdn.githack.com/KaKi87-2/xedb/4302ba53ca055b01a4f6b7c993dd18c0aa26e1a7/mod.js';
+    import browser from 'https://rawcdn.githack.com/KaKi87-2/xedb/4302ba53ca055b01a4f6b7c993dd18c0aa26e1a7/lib/browser.js';
     const datastore = createDatastore({
         runtime: browser
     });
