@@ -15,7 +15,9 @@ export const create = ({
             return data;
         },
         count = async query => {
-            const _query = runtime.query(query);
+            const _query = runtime.query({
+                query
+            });
             let count = 0;
             await runtime.readLines({
                 path,
@@ -27,7 +29,9 @@ export const create = ({
             return count;
         },
         deleteMany = async query => {
-            const _query = runtime.query(query);
+            const _query = runtime.query({
+                query
+            });
             let deletedCount = 0;
             await runtime.readLines({
                 path,
