@@ -174,6 +174,7 @@ export const create = ({
     return {
         load,
         count,
+        countDocuments: count,
         deleteOne,
         deleteMany,
         find,
