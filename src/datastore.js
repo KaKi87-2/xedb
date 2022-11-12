@@ -40,6 +40,33 @@ export const create = ({
             });
             return count;
         },
+        deleteOne = async query => {
+            const _query = runtime.query({
+                query,
+                _updatedAt
+            });
+            let deletedCount = 0;
+            await runtime.readLines({
+                path,
+                onLine: async line => {
+                    const data = await serializer.deserialize(await beforeDeserialize(line));
+                    if(_query(data)){
+                        await runtime.appendLine({
+                            path,
+                            line: await serializer.serialize(_beforeSerialize({
+                                _id: data._id,
+                                _isDeleted: true
+                            }))
+                        });
+                        deletedCount++;
+                        return true;
+                    }
+                }
+            });
+            return {
+                deletedCount
+            };
+        },
         deleteMany = async query => {
             const _query = runtime.query({
                 query,
@@ -77,6 +104,7 @@ export const create = ({
     return {
         load,
         count,
+        deleteOne,
         deleteMany,
         insertOne
     };
