@@ -130,6 +130,7 @@ export const create = ({
             });
             return result;
         },
+        estimatedDocumentCount = () => Object.keys(_updatedAt).length,
         find = async query => {
             const
                 _query = runtime.query({
@@ -205,6 +206,7 @@ export const create = ({
         deleteMany,
         deleteOne,
         distinct,
+        estimatedDocumentCount,
         find,
         findOne,
         findOneAndDelete: query => deleteOne(
