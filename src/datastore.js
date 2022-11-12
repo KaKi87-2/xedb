@@ -1,3 +1,5 @@
+import jsonSortReplacer from '../lib/jsonSortReplacer.js';
+
 export const create = ({
     path,
     runtime,
@@ -103,6 +105,31 @@ export const create = ({
                 deletedCount
             };
         },
+        distinct = async (
+            field,
+            query
+        ) => {
+            const
+                _query = runtime.query({
+                    query,
+                    _updatedAt
+                }),
+                values = new Set(),
+                result = [];
+            await runtime.readLines({
+                path,
+                onLine: async line => {
+                    const
+                        data = await serializer.deserialize(await beforeDeserialize(line)),
+                        value = JSON.stringify(data[field], jsonSortReplacer);
+                    if(_query(data) && value && !values.has(value)){
+                        values.add(value);
+                        result.push(data);
+                    }
+                }
+            });
+            return result;
+        },
         find = async query => {
             const
                 _query = runtime.query({
@@ -177,6 +204,7 @@ export const create = ({
         countDocuments: count,
         deleteMany,
         deleteOne,
+        distinct,
         find,
         findOne,
         findOneAndDelete: query => deleteOne(
