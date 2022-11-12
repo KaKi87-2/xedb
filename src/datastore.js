@@ -145,6 +145,25 @@ export const create = ({
                 line: await afterSerialize(await serializer.serialize(data))
             });
             return data;
+        },
+        findOneAndReplace = async (
+            query,
+            data,
+            {
+                returnDocument = 'before'
+            } = {}
+        ) => {
+            const
+                oldResult = await findOne(query),
+                newResult = await insertOne({
+                    ...data,
+                    _id: oldResult._id
+                });
+            return returnDocument === 'before'
+                ? oldResult
+                : returnDocument === 'after'
+                    ? newResult
+                    : undefined;
         };
     return {
         load,
@@ -159,6 +178,7 @@ export const create = ({
                 _isReturnDocument: true
             }
         ),
+        findOneAndReplace,
         insertOne
     };
 };
