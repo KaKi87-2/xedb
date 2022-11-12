@@ -93,6 +93,23 @@ export const create = ({
                 deletedCount
             };
         },
+        find = async query => {
+            const
+                _query = runtime.query({
+                    query,
+                    _updatedAt
+                }),
+                result = [];
+            await runtime.readLines({
+                path,
+                onLine: async line => {
+                    const data = await serializer.deserialize(await beforeDeserialize(line));
+                    if(_query(data))
+                        result.push(data);
+                }
+            });
+            return result;
+        },
         insertOne = async data => {
             data = _beforeSerialize(data);
             await runtime.appendLine({
@@ -106,6 +123,7 @@ export const create = ({
         count,
         deleteOne,
         deleteMany,
+        find,
         insertOne
     };
 };
