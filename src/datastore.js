@@ -26,6 +26,29 @@ export const create = ({
             });
             return count;
         },
+        deleteMany = async query => {
+            const _query = runtime.query(query);
+            let deletedCount = 0;
+            await runtime.readLines({
+                path,
+                onLine: async line => {
+                    const data = await serializer.deserialize(await beforeDeserialize(line));
+                    if(_query(data)){
+                        await runtime.appendLine({
+                            path,
+                            line: await serializer.serialize({
+                                _id: data._id,
+                                _isDeleted: true
+                            })
+                        });
+                        deletedCount++;
+                    }
+                }
+            });
+            return {
+                deletedCount
+            };
+        },
         insertOne = async data => {
             data = _beforeSerialize(data);
             await runtime.appendLine({
@@ -36,6 +59,7 @@ export const create = ({
         };
     return {
         count,
+        deleteMany,
         insertOne
     };
 };
