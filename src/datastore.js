@@ -202,6 +202,32 @@ export const create = ({
             for(const item of data)
                 result.push(await insertOne(item));
             return result;
+        },
+        updateOne = async (
+            query,
+            data,
+            {
+                returnDocument
+            } = {}
+        ) => {
+            const oldResult = await findOne(query);
+            let newResult;
+            if(oldResult){
+                newResult = await insertOne({
+                    ...runtime.modify(
+                        oldResult,
+                        data
+                    ),
+                    _id: oldResult._id
+                });
+            }
+            return returnDocument === 'before'
+                ? oldResult
+                : returnDocument === 'after'
+                    ? newResult
+                    : {
+                        modifiedCount: oldResult && newResult ? 1 : 0
+                    };
         };
     return {
         load,
@@ -232,8 +258,22 @@ export const create = ({
                 returnDocument
             }
         ),
+        findOneAndUpdate: (
+            query,
+            data,
+            {
+                returnDocument = 'before'
+            } = {}
+        ) => updateOne(
+            query,
+            data,
+            {
+                returnDocument
+            }
+        ),
         insertMany,
         insertOne,
-        replaceOne
+        replaceOne,
+        updateOne
     };
 };
