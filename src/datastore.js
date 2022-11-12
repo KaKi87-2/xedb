@@ -175,8 +175,8 @@ export const create = ({
         load,
         count,
         countDocuments: count,
-        deleteOne,
         deleteMany,
+        deleteOne,
         find,
         findOne,
         findOneAndDelete: query => deleteOne(
@@ -186,7 +186,7 @@ export const create = ({
             }
         ),
         findOneAndReplace,
-        insertOne,
-        insertMany
+        insertMany,
+        insertOne
     };
 };
