@@ -174,24 +174,28 @@ export const create = ({
             });
             return data;
         },
-        findOneAndReplace = async (
+        replaceOne = async (
             query,
             data,
             {
-                returnDocument = 'before'
+                returnDocument
             } = {}
         ) => {
-            const
-                oldResult = await findOne(query),
+            const oldResult = await findOne(query);
+            let newResult;
+            if(oldResult){
                 newResult = await insertOne({
                     ...data,
                     _id: oldResult._id
                 });
+            }
             return returnDocument === 'before'
                 ? oldResult
                 : returnDocument === 'after'
                     ? newResult
-                    : undefined;
+                    : {
+                        modifiedCount: oldResult && newResult ? 1 : 0
+                    };
         },
         insertMany = async data => {
             const result = [];
@@ -215,8 +219,21 @@ export const create = ({
                 _isReturnDocument: true
             }
         ),
-        findOneAndReplace,
+        findOneAndReplace: (
+            query,
+            data,
+            {
+                returnDocument = 'before'
+            } = {}
+        ) => replaceOne(
+            query,
+            data,
+            {
+                returnDocument
+            }
+        ),
         insertMany,
-        insertOne
+        insertOne,
+        replaceOne
     };
 };
