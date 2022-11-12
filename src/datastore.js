@@ -9,14 +9,26 @@ export const create = ({
     beforeDeserialize = data => data
 }) => {
     const
+        _updatedAt = {},
         _beforeSerialize = data => {
             if(!data._id)
                 data._id = runtime.nanoid();
+            data._updatedAt = _updatedAt[data._id] = new Date().toISOString();
             return data;
+        },
+        load = async () => {
+            await runtime.readLines({
+                path,
+                onLine: async line => {
+                    const data = await serializer.deserialize(await beforeDeserialize(line));
+                    _updatedAt[data._id] = data._updatedAt;
+                }
+            });
         },
         count = async query => {
             const _query = runtime.query({
-                query
+                query,
+                _updatedAt
             });
             let count = 0;
             await runtime.readLines({
@@ -30,7 +42,8 @@ export const create = ({
         },
         deleteMany = async query => {
             const _query = runtime.query({
-                query
+                query,
+                _updatedAt
             });
             let deletedCount = 0;
             await runtime.readLines({
@@ -40,10 +53,10 @@ export const create = ({
                     if(_query(data)){
                         await runtime.appendLine({
                             path,
-                            line: await serializer.serialize({
+                            line: await serializer.serialize(_beforeSerialize({
                                 _id: data._id,
                                 _isDeleted: true
-                            })
+                            }))
                         });
                         deletedCount++;
                     }
@@ -62,6 +75,7 @@ export const create = ({
             return data;
         };
     return {
+        load,
         count,
         deleteMany,
         insertOne
