@@ -228,6 +228,17 @@ export const create = ({
                     : {
                         modifiedCount: oldResult && newResult ? 1 : 0
                     };
+        },
+        updateMany = async (
+            query,
+            data
+        ) => {
+            const oldData = await find(query);
+            for(const { _id } of oldData)
+                await updateOne({ _id }, data);
+            return {
+                modifiedCount: oldData.length
+            };
         };
     return {
         load,
@@ -274,6 +285,7 @@ export const create = ({
         insertMany,
         insertOne,
         replaceOne,
+        updateMany,
         updateOne
     };
 };
