@@ -40,12 +40,19 @@ export const create = ({
             });
             return count;
         },
-        deleteOne = async query => {
+        deleteOne = async (
+            query,
+            {
+                _isReturnDocument
+            } = {}
+        ) => {
             const _query = runtime.query({
                 query,
                 _updatedAt
             });
-            let deletedCount = 0;
+            let
+                deletedCount = 0,
+                result;
             await runtime.readLines({
                 path,
                 onLine: async line => {
@@ -59,13 +66,16 @@ export const create = ({
                             }))
                         });
                         deletedCount++;
+                        result = data;
                         return true;
                     }
                 }
             });
-            return {
-                deletedCount
-            };
+            return _isReturnDocument
+                ? result
+                : {
+                    deletedCount
+                };
         },
         deleteMany = async query => {
             const _query = runtime.query({
@@ -143,6 +153,12 @@ export const create = ({
         deleteMany,
         find,
         findOne,
+        findOneAndDelete: query => deleteOne(
+            query,
+            {
+                _isReturnDocument: true
+            }
+        ),
         insertOne
     };
 };
