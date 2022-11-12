@@ -164,6 +164,12 @@ export const create = ({
                 : returnDocument === 'after'
                     ? newResult
                     : undefined;
+        },
+        insertMany = async data => {
+            const result = [];
+            for(const item of data)
+                result.push(await insertOne(item));
+            return result;
         };
     return {
         load,
@@ -179,6 +185,7 @@ export const create = ({
             }
         ),
         findOneAndReplace,
-        insertOne
+        insertOne,
+        insertMany
     };
 };
