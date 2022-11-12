@@ -8,6 +8,7 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
+    "nanoid": "^4.0.0",
     "sift": "^16.0.1"
   }
 }

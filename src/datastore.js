@@ -9,6 +9,11 @@ export const create = ({
     beforeDeserialize = data => data
 }) => {
     const
+        _beforeSerialize = data => {
+            if(!data._id)
+                data._id = runtime.nanoid();
+            return data;
+        },
         count = async query => {
             const _query = runtime.query(query);
             let count = 0;
@@ -22,10 +27,12 @@ export const create = ({
             return count;
         },
         insertOne = async data => {
+            data = _beforeSerialize(data);
             await runtime.appendLine({
                 path,
                 line: await afterSerialize(await serializer.serialize(data))
             });
+            return data;
         };
     return {
         count,
