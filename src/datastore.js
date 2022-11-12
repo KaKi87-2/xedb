@@ -2,8 +2,8 @@ export const create = ({
     path,
     runtime,
     serializer = {
-        serialize: data => data,
-        deserialize: data => data
+        serialize: data => JSON.stringify(data),
+        deserialize: data => JSON.parse(data)
     },
     afterSerialize = data => data,
     beforeDeserialize = data => data
