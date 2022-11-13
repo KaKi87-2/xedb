@@ -27,6 +27,25 @@ export const create = ({
                 }
             });
         },
+        compact = async () => {
+            const compactedPath = `${path}.bak`;
+            await runtime.readLines({
+                path,
+                onLine: async line => {
+                    const data = await serializer.deserialize(await beforeDeserialize(line));
+                    if(runtime.query({ _updatedAt })(data)){
+                        await runtime.appendLine({
+                            path: compactedPath,
+                            line: await afterSerialize(await serializer.serialize(data))
+                        });
+                    }
+                }
+            });
+            await runtime.rename({
+                oldPath: compactedPath,
+                newPath: path
+            });
+        },
         count = async query => {
             const _query = runtime.query({
                 query,
@@ -242,6 +261,7 @@ export const create = ({
         };
     return {
         load,
+        compact,
         count,
         countDocuments: count,
         deleteMany,
