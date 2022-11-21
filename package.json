@@ -9,6 +9,7 @@
   "type": "module",
   "dependencies": {
     "nanoid": "^4.0.0",
+    "nedb-model": "git+https://git.kaki87.net/KaKi87/nedb-model.git",
     "sift": "^16.0.1"
   }
 }
