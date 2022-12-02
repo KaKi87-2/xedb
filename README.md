@@ -10,11 +10,11 @@ Cross-runtime embedded database for JavaScript.
 
 ```js
 import {
-    createDatastore
+    createDatastore,
+    denoRuntime
 } from 'https://git.kaki87.net/KaKi87/xedb/raw/branch/master/mod.js';
-import deno from 'https://git.kaki87.net/KaKi87/xedb/raw/branch/master/lib/deno.js';
 const datastore = createDatastore({
-    runtime: deno
+    runtime: denoRuntime
 });
 ```
 
@@ -22,11 +22,11 @@ const datastore = createDatastore({
 
 ```js
 import {
-    createDatastore
+    createDatastore,
+    nodeRuntime
 } from 'xedb.js';
-import node from 'xedb.js/lib/node.js';
 const datastore = createDatastore({
-    runtime: node
+    runtime: nodeRuntime
 });
 ```
 
@@ -35,11 +35,11 @@ const datastore = createDatastore({
 ```html
 <script type="module">
     import {
-        createDatastore
-    } from 'https://rawcdn.githack.com/KaKi87-2/xedb/4302ba53ca055b01a4f6b7c993dd18c0aa26e1a7/mod.js';
-    import browser from 'https://rawcdn.githack.com/KaKi87-2/xedb/4302ba53ca055b01a4f6b7c993dd18c0aa26e1a7/lib/browser.js';
+        createDatastore,
+        browserRuntime
+    } from 'https://raw.githack.com/KaKi87-2/xedb/master/mod.js';
     const datastore = createDatastore({
-        runtime: browser
+        runtime: browserRuntime
     });
 </script>
 ```
@@ -47,8 +47,8 @@ const datastore = createDatastore({
 ### In-memory
 
 Replace the `runtime` import with :
-- `inMemory.denoOrBrowser.js` for Deno or browser ;
-- `inMemory.node.js` for Node.
+- `inMemoryDenoOrBrowserRuntime` for Deno or browser ;
+- `inMemoryNodeRuntime` for Node.
 
 ## Related projects
 
