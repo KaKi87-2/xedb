@@ -18,6 +18,10 @@ export const create = ({
             data._updatedAt = _updatedAt[data._id] = new Date().toISOString();
             return data;
         },
+        /**
+         * Load the database.
+         * @returns {Promise<void>}
+         */
         load = async () => {
             await runtime.readLines({
                 path,
@@ -27,6 +31,10 @@ export const create = ({
                 }
             });
         },
+        /**
+         * Compact the database.
+         * @returns {Promise<void>}
+         */
         compact = async () => {
             const compactedPath = `${path}.bak`;
             await runtime.readLines({
@@ -46,6 +54,11 @@ export const create = ({
                 newPath: path
             });
         },
+        /**
+         * Gets the number of documents matching the query.
+         * @param {import('sift').Query} query
+         * @returns {Promise<number>}
+         */
         count = async query => {
             const _query = runtime.query({
                 query,
@@ -61,6 +74,12 @@ export const create = ({
             });
             return count;
         },
+        /**
+         * Deletes a single document.
+         * @param {import('sift').Query} query
+         * @param {boolean} _isReturnDocument
+         * @returns {Promise<{deletedCount: number}|Object>}
+         */
         deleteOne = async (
             query,
             {
@@ -98,6 +117,11 @@ export const create = ({
                     deletedCount
                 };
         },
+        /**
+         * Deletes multiple documents.
+         * @param {import('sift').Query} query
+         * @returns {Promise<{deletedCount: number}>}
+         */
         deleteMany = async query => {
             const _query = runtime.query({
                 query,
@@ -124,6 +148,12 @@ export const create = ({
                 deletedCount
             };
         },
+        /**
+         * Gets multiple documents that have distinct values for the specified field.
+         * @param {string} field
+         * @param {import('sift').Query} query
+         * @returns {Promise<Object[]>}
+         */
         distinct = async (
             field,
             query
@@ -149,7 +179,16 @@ export const create = ({
             });
             return result;
         },
+        /**
+         * Gets the estimate number of documents using metadata.
+         * @returns {number}
+         */
         estimatedDocumentCount = () => Object.keys(_updatedAt).length,
+        /**
+         * Gets multiple documents.
+         * @param {import('sift').Query} query
+         * @returns {Promise<Object[]>}
+         */
         find = async query => {
             const
                 _query = runtime.query({
@@ -167,6 +206,11 @@ export const create = ({
             });
             return result;
         },
+        /**
+         * Gets a single document.
+         * @param {import('sift').Query} query
+         * @returns {Promise<Object>}
+         */
         findOne = async query => {
             const _query = runtime.query({
                 query,
@@ -185,6 +229,11 @@ export const create = ({
             });
             return result;
         },
+        /**
+         * Inserts a single document.
+         * @param {Object} data
+         * @returns {Promise<Object>}
+         */
         insertOne = async data => {
             data = _beforeSerialize(data);
             await runtime.appendLine({
@@ -193,6 +242,13 @@ export const create = ({
             });
             return data;
         },
+        /**
+         * Replaces a single document.
+         * @param {import('sift').Query} query
+         * @param {Object} data
+         * @param {'before'|'after'} returnDocument
+         * @returns {Promise<{modifiedCount: number}|Object>}
+         */
         replaceOne = async (
             query,
             data,
@@ -216,12 +272,24 @@ export const create = ({
                         modifiedCount: oldResult && newResult ? 1 : 0
                     };
         },
+        /**
+         * Inserts multiple new documents.
+         * @param {Object[]} data
+         * @returns {Promise<Object[]>}
+         */
         insertMany = async data => {
             const result = [];
             for(const item of data)
                 result.push(await insertOne(item));
             return result;
         },
+        /**
+         * Modifies a single document.
+         * @param {import('sift').Query} query
+         * @param {Object} data
+         * @param {'before'|'after'} returnDocument
+         * @returns {Promise<{modifiedCount: number}|Object>}
+         */
         updateOne = async (
             query,
             data,
@@ -248,6 +316,12 @@ export const create = ({
                         modifiedCount: oldResult && newResult ? 1 : 0
                     };
         },
+        /**
+         * Modifies multiple documents.
+         * @param {import('sift').Query} query
+         * @param {Object} data
+         * @returns {Promise<{modifiedCount: number}>}
+         */
         updateMany = async (
             query,
             data
@@ -270,12 +344,24 @@ export const create = ({
         estimatedDocumentCount,
         find,
         findOne,
+        /**
+         * Deletes a single document.
+         * @param {import('sift').Query} query
+         * @returns {Promise<Object>}
+         */
         findOneAndDelete: query => deleteOne(
             query,
             {
                 _isReturnDocument: true
             }
         ),
+        /**
+         * Replaces a single document.
+         * @param {import('sift').Query} query
+         * @param {Object} data
+         * @param {'before'|'after'} returnDocument
+         * @returns {Promise<Object>}
+         */
         findOneAndReplace: (
             query,
             data,
@@ -289,6 +375,13 @@ export const create = ({
                 returnDocument
             }
         ),
+        /**
+         * Modifies a single document.
+         * @param {import('sift').Query} query
+         * @param {Object} data
+         * @param {'before'|'after'} returnDocument
+         * @returns {Promise<Object>}
+         */
         findOneAndUpdate: (
             query,
             data,
