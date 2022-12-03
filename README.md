@@ -4,7 +4,7 @@ Cross-runtime embedded database for JavaScript.
 
 ## Usage
 
-### Import
+### Storage runtimes
 
 #### From [Deno](https://deno.land)
 
@@ -44,11 +44,21 @@ const datastore = createDatastore({
 </script>
 ```
 
-### In-memory
+### In-memory runtimes
 
-Replace the `runtime` import with :
+Using *[storage runtimes](#storage-runtimes)* examples, replace the `runtime` import with :
 - `inMemoryDenoOrBrowserRuntime` for Deno or browser ;
 - `inMemoryNodeRuntime` for Node.
+
+### API
+
+Most MongoDB [methods](https://www.mongodb.com/docs/manual/reference/method/js-collection/) as well as [query operators](https://www.mongodb.com/docs/manual/reference/operator/query/) (thanks to [`crcn/sift.js`](https://github.com/crcn/sift.js)) and [update operators](https://www.mongodb.com/docs/manual/reference/operator/update/) (thanks to [`seald/nedb/lib/model`](https://github.com/seald/nedb/blob/master/lib/model.js#L310)) are supported.
+
+### [Serializers](https://en.wikipedia.org/wiki/Serialization)
+
+The `createDatastore` method takes a `serializer` parameter containing `serialize` and `deserialize` methods ([JSON](https://en.wikipedia.org/wiki/JSON) by default).
+
+[DSV](https://en.wikipedia.org/wiki/Delimiter-separated_values) support is planned.
 
 ## Related projects
 
