@@ -1,6 +1,6 @@
 {
   "name": "xedb.js",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0",
   "description": "Cross-runtime embedded database for JavaScript.",
   "main": "mod.js",
   "repository": "https://git.kaki87.net/KaKi87/xedb",
