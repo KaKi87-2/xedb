@@ -47,8 +47,9 @@ const datastore = createDatastore({
 ### In-memory runtimes
 
 Using *[storage runtimes](#storage-runtimes)* examples, replace the `runtime` import with :
-- `inMemory.denoOrBrowser.js` for Deno or browser ;
-- `inMemory.node.js` for Node.
+- `inMemory.deno.js` for Deno ;
+- `inMemory.node.js` for Node ;
+- `inMemory.browser.js` for browser.
 
 ### API
 
